@@ -24,10 +24,25 @@ def root():
     print("test")
     return {"cool": "guy"}
 
-@app.get("/getStory{title}")
+@app.get("/getStory/{title}")
 def getStory(title: str):
-    cursor = authorized_table.find_one({"title": title})
+    cursor = story_table.find_one({"title": title})
     return dumps(cursor)
+
+@app.get("/getStorySection/{title}/{index}")
+def getStory(title: str, index: int):
+    text = ""
+    cursor = story_table.find_one({"title": title})
+    
+    for document in cursor:
+        text = document["content"]
+        sentences = text.split('.')
+        groups = [sentences[index:index+4]]
+    
+        # Join sentences back into strings
+        for i, group in enumerate(groups):
+            groups[i] = '.'.join(group).strip()
+    return dumps(groups)
 
 @app.get("/getTTS")
 def getStory():

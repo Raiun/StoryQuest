@@ -5,7 +5,6 @@ import { AudioManager } from "./AudioManager";
 import { useTranscriber } from "../hooks/useTranscriber";
 import Transcript from "./Transcript";
 import { AiFillSound } from "react-icons/ai";
-import getTextToSpeech from "./TextToSpeech";
 
 const sampleText = ["The sun did not shine.\n" +
 "It was too wet to play.\n" +
@@ -58,6 +57,24 @@ const ReadingScreen = (props: {storyName : string;}) => {
   const [userText, SetUserText] = useState<string>("");
   const [readMode, SetReadMode] = useState<number>(0);
   const transcriber = useTranscriber();
+  const [storySection, SetStorySection] = useState<string>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/getStorySection" + props.storyName + "/" + storyIndex);
+        const jsonData = await response.json();
+        console.log(jsonData);
+        SetStorySection(JSON.parse(jsonData));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    return () => {
+      // Cleanup logic here (if needed)
+    };
+  }, [storyIndex]);
 
   function getNextPage()  {
     SetStoryIndex(storyIndex + 1);
