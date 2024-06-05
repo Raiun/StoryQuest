@@ -55,6 +55,15 @@ export default function Transcript({ transcribedData }: Props) {
         }
     });
 
+    function cleanOutput(text : string | undefined) {
+        if (text) {
+          text = text.replace(/[^0-9a-z\s]/gi, '');
+          text = text.toLowerCase();
+        }
+    
+        return text;
+    }
+
     return (
         <div
             ref={divRef}

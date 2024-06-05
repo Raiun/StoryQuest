@@ -5,6 +5,7 @@ import { AudioManager } from "./AudioManager";
 import { useTranscriber } from "../hooks/useTranscriber";
 import Transcript from "./Transcript";
 import { AiFillSound } from "react-icons/ai";
+import getTextToSpeech from "./TextToSpeech";
 
 const sampleText = ["The sun did not shine.\n" +
 "It was too wet to play.\n" +
@@ -62,7 +63,10 @@ const ReadingScreen = (props: {storyName : string;}) => {
     SetStoryIndex(storyIndex + 1);
   }
 
-  function playAudio() {
+  function playAudio(text: string) {
+    //getTextToSpeech(text);
+    //const audio = new Audio("../../public/speech.mp3");
+    //audio.play();
     console.log("Audio Playing");
   }
 
@@ -82,6 +86,9 @@ const ReadingScreen = (props: {storyName : string;}) => {
   function checkedMistakes() {
     let output = "";
     
+    console.log(cleanOutput(transcriber.output?.text))
+    console.log(cleanOutput(sampleText[storyIndex]))
+
     if (cleanOutput(transcriber.output?.text) === cleanOutput(sampleText[storyIndex])) {
       console.log("Correct");
       output = "Correct";
@@ -94,6 +101,10 @@ const ReadingScreen = (props: {storyName : string;}) => {
     SetUserText(output);
   }
 
+  useEffect(() => {
+    checkedMistakes()
+  }, [])
+
   return (
     <div className="w-full h-30 flex flex-col ml-10 mr-10 mt-20 bg-white overflow-hidden shadow-lg justify-center items-center">
         <h1 className="mt-10 mb-0 m-auto font-bold text-center text-3xl">
@@ -103,7 +114,7 @@ const ReadingScreen = (props: {storyName : string;}) => {
         <HorizontalBar></HorizontalBar>
         <img width="400" height="600" src="/catInHat.jpg"></img>
         <div className="w-1/2 max-h-72 flex mt-5 mb-10 p-5 bg-gray-300 text-center justify-center items-center whitespace-pre-wrap">
-          <button onClick={playAudio} className="hover:bg-gray-400 rounded-md"><AiFillSound size="36" /></button>
+          <button onClick={() => playAudio(sampleText[storyIndex])} className="hover:bg-gray-400 rounded-md"><AiFillSound size="36" /></button>
           <span className="text-center m-auto text-md hover:bg-gray-400 hover:underline">{(readMode == 0) ? sampleText[storyIndex] : getMistakeText(transcriber.output?.text)}</span>
         </div>
         <HorizontalBar></HorizontalBar>

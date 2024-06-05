@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useRef } from "react";
 import { useWorker } from "./useWorker";
 import Constants from "../utils/Constants";
 
@@ -59,6 +59,7 @@ export function useTranscriber(): Transcriber {
     const [isModelLoading, setIsModelLoading] = useState(false);
 
     const [progressItems, setProgressItems] = useState<ProgressItem[]>([]);
+    const workerRef = useRef();
 
     const webWorker = useWorker((event : any) => {
         const message = event.data;
