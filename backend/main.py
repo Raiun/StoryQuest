@@ -10,6 +10,10 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 import whisper
+import base64
+from pydantic import BaseModel
+from openai import OpenAI
+import aiofiles
 
 load_dotenv()
 
@@ -49,11 +53,24 @@ def getStory(title: str, index: int):
             groups[i] = '.'.join(group).strip()
     return dumps(groups)
 
-@app.get("/getSTT")
-def getStory():
-    # Get the absolute path of the current file
-    current_dir = os.path.dirname(os.path.abspath(__file__))
+class AudioRequest(BaseModel):
+    audio: str
 
-    result = model.transcribe(os.path.join(current_dir, "test.mp3"), fp16=False)
-    print(result["text"])
-    return result["text"]
+@app.post("/getSTT")
+async def getStory(request: AudioRequest):
+    # Get the absolute path of the current file
+    base64_audio = request.audio
+    audio = base64.b64decode(base64_audio)
+    file_path = "./test1.mp3"
+    try:
+        async with aiofiles.open(file_path, 'wb') as f:
+            await f.write(audio)
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            result = model.transcribe(os.path.join(current_dir, "test.mp3"), fp16=False)
+            print(result["text"])
+            return result["text"]
+    except Exception as error:
+        print(f"Error processing audio: {error}")
+
+    #print(result["text"])
+    return ""
