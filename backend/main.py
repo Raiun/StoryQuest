@@ -1,15 +1,20 @@
 import datetime
 import json
 import subprocess
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI
 #from db import test, unlocks_table, authorized_table
 from bson.json_util import dumps
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from openai import OpenAI
+import whisper
+
+load_dotenv()
 
 app = FastAPI()
+model = whisper.load_model("base")
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,14 +49,11 @@ def getStory(title: str, index: int):
             groups[i] = '.'.join(group).strip()
     return dumps(groups)
 
-@app.get("/getTTS")
+@app.get("/getSTT")
 def getStory():
-    client = OpenAI()
+    # Get the absolute path of the current file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    response = client.audio.speech.create(
-        model="tts-1",
-        voice="onyx",
-        input="Hello world! This is a streaming test.",
-    )
-
-    response.stream_to_file("./output.mp3")
+    result = model.transcribe(os.path.join(current_dir, "test.mp3"), fp16=False)
+    print(result["text"])
+    return result["text"]
