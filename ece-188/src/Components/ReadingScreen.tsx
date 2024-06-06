@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { AiFillSound } from "react-icons/ai";
 import Recorder from "./Recorder";
-import { Microphone } from "./Microphone";
 
 const sampleText = ["The sun did not shine.\n" +
 "It was too wet to play.\n" +
@@ -115,10 +114,10 @@ const ReadingScreen = (props: {storyName : string;}) => {
         <img width="400" height="600" src="/catInHat.jpg"></img>
         <div className="w-1/2 max-h-72 flex mt-5 mb-10 p-5 bg-gray-300 text-center justify-center items-center whitespace-pre-wrap">
           <button onClick={() => playAudio(sampleText[storyIndex])} className="hover:bg-gray-400 rounded-md"><AiFillSound size="36" /></button>
-          <span className="text-center m-auto text-md hover:bg-gray-400 hover:underline">{(readMode == 0) ? sampleText[storyIndex] : getMistakeText(transcriber.output?.text)}</span>
+          <span className="text-center m-auto text-md hover:bg-gray-400 hover:underline">{sampleText[storyIndex]}</span>
         </div>
         <HorizontalBar></HorizontalBar>
-        <Microphone />
+        <Recorder />
         <button onClick={getNextPage}>Get Next Page</button>
     </div>
   );

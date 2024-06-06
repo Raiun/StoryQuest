@@ -3,11 +3,12 @@ import json
 import subprocess
 import os
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 #from db import test, unlocks_table, authorized_table
 from bson.json_util import dumps
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pathlib import Path
 import whisper
 import base64
@@ -53,24 +54,14 @@ def getStory(title: str, index: int):
             groups[i] = '.'.join(group).strip()
     return dumps(groups)
 
-class AudioRequest(BaseModel):
-    audio: str
-
 @app.post("/getSTT")
-async def getStory(request: AudioRequest):
+async def getStory(file : UploadFile = File(...)):
     # Get the absolute path of the current file
-    base64_audio = request.audio
-    audio = base64.b64decode(base64_audio)
-    file_path = "./test1.mp3"
-    try:
-        async with aiofiles.open(file_path, 'wb') as f:
-            await f.write(audio)
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            result = model.transcribe(os.path.join(current_dir, "test.mp3"), fp16=False)
-            print(result["text"])
-            return result["text"]
-    except Exception as error:
-        print(f"Error processing audio: {error}")
-
-    #print(result["text"])
-    return ""
+    #print(result["text"])'''
+    with open(f"./test2.mp3", "wb") as f:
+        f.write(await file.read())
+    return JSONResponse(content={
+        "filename": file.filename,
+        "content_type": file.content_type,
+        "message": "File processed successfully"
+    })
