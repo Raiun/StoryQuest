@@ -22,7 +22,7 @@ export default function RootLayout({
         <div className="absolute top-0 right-56 m-0 p-0">
             <ProfileButton />
         </div>
-        <div className="flex flex-row">
+        <div className="w-full h-full flex flex-row">
           <Sidebar></Sidebar>
           {children}
         </div>

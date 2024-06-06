@@ -99,7 +99,7 @@ const Recorder = (props) => {
       </button>
       {(stt && mistakes) &&
         <div className="text-lg text-center">
-          <p>Mistakes! Try Again!</p>
+          <p>You've Made a Few Mistakes! Try Again!</p>
           <div dangerouslySetInnerHTML={{ __html: mistakes }} className="w-4/5 min-h-12 m-auto mt-5 p-5 bg-gray-300 overflow-hidden text-lg">
           </div>
         </div>

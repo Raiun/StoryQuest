@@ -25,8 +25,12 @@ const Sidebar = () => {
         <Link href="/">
             <SideBarIcon icon={<BsBookHalf size="30" />} text="Stories" />
         </Link>
-        <SideBarIcon icon={<MdLocalGroceryStore size="30" />} text="Store" />
-        <SideBarIcon icon={<IoSettingsOutline size="30" />} text="Settings" />
+        <Link href="/Store">
+            <SideBarIcon icon={<MdLocalGroceryStore size="30" />} text="Store" />
+        </Link>
+        <Link href="/Settings">
+            <SideBarIcon icon={<IoSettingsOutline size="30" />} text="Settings" />
+        </Link>
     </div>
   );
 }

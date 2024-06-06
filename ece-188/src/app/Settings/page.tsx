@@ -1,7 +1,8 @@
 import ReadingScreen from "@/Components/ReadingScreen";
 
-export default function ReadAlong() {
+
+export default function Settings() {
   return (
-    <ReadingScreen></ReadingScreen>
+    <div></div>
   );
 }
