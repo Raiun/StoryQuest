@@ -1,10 +1,8 @@
 "use client"
 
 import React, { useCallback, useEffect, useState } from "react";
-import { AudioManager } from "./AudioManager";
-import { useTranscriber } from "../hooks/useTranscriber";
-import Transcript from "./Transcript";
 import { AiFillSound } from "react-icons/ai";
+import Recorder from "./Recorder";
 
 const sampleText = ["The sun did not shine.\n" +
 "It was too wet to play.\n" +
@@ -56,7 +54,6 @@ const ReadingScreen = (props: {storyName : string;}) => {
   const [storyIndex, SetStoryIndex] = useState<number>(0);
   const [userText, SetUserText] = useState<string>("");
   const [readMode, SetReadMode] = useState<number>(0);
-  const transcriber = useTranscriber();
   const [storySection, SetStorySection] = useState<string>("");
 
   useEffect(() => {
@@ -101,21 +98,6 @@ const ReadingScreen = (props: {storyName : string;}) => {
   }
 
   function checkedMistakes() {
-    let output = "";
-    
-    console.log(cleanOutput(transcriber.output?.text))
-    console.log(cleanOutput(sampleText[storyIndex]))
-
-    if (cleanOutput(transcriber.output?.text) === cleanOutput(sampleText[storyIndex])) {
-      console.log("Correct");
-      output = "Correct";
-    }
-    else {
-      console.log("Mistakes were made");
-      output = "Mistakes were made";
-    }
-    
-    SetUserText(output);
   }
 
   useEffect(() => {
@@ -135,10 +117,8 @@ const ReadingScreen = (props: {storyName : string;}) => {
           <span className="text-center m-auto text-md hover:bg-gray-400 hover:underline">{(readMode == 0) ? sampleText[storyIndex] : getMistakeText(transcriber.output?.text)}</span>
         </div>
         <HorizontalBar></HorizontalBar>
-        <AudioManager transcriber={transcriber}></AudioManager>
-        <Transcript transcribedData={transcriber.output}></Transcript>
+        <Recorder></Recorder>
         <button onClick={getNextPage}>Get Next Page</button>
-        {userText}
     </div>
   );
 }
