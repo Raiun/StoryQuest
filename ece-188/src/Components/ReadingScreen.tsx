@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AiFillSound } from "react-icons/ai";
 import Recorder from "./Recorder";
 
@@ -55,6 +55,7 @@ const ReadingScreen = (props: {storyName : string;}) => {
   const [userText, SetUserText] = useState<string>("");
   const [readMode, SetReadMode] = useState<number>(0);
   const [storySection, SetStorySection] = useState<string>("");
+  const [correctBool, SetCorrectBool] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +76,7 @@ const ReadingScreen = (props: {storyName : string;}) => {
 
   function getNextPage()  {
     SetStoryIndex(storyIndex + 1);
+    SetCorrectBool(false);
   }
 
   function playAudio(text: string) {
@@ -101,11 +103,11 @@ const ReadingScreen = (props: {storyName : string;}) => {
   }
 
   useEffect(() => {
-    checkedMistakes()
+
   }, [])
 
   return (
-    <div className="w-full h-30 flex flex-col ml-10 mr-10 mt-20 bg-white overflow-hidden shadow-lg justify-center items-center">
+    <div className="w-full h-30 flex flex-col mt-20 ml-36 mr-10 bg-white overflow-hidden shadow-lg justify-center items-center">
         <h1 className="mt-10 mb-0 m-auto font-bold text-center text-3xl">
             {(readMode == 0) ? <p>Read Along!</p> : <p>Review Mistakes</p>}
             <p className="text-gray-400 text-lg">Section: {storyIndex}{props.storyName}</p>
@@ -117,8 +119,10 @@ const ReadingScreen = (props: {storyName : string;}) => {
           <span className="text-center m-auto text-md hover:bg-gray-400 hover:underline">{sampleText[storyIndex]}</span>
         </div>
         <HorizontalBar></HorizontalBar>
-        <Recorder />
-        <button onClick={getNextPage}>Get Next Page</button>
+        <Recorder storyText={sampleText[storyIndex]} setBool={SetCorrectBool} />
+        {correctBool && 
+          <button onClick={getNextPage} className="bg-blue-400 text-white font-bold shadow-lg m-auto mb-10 p-5 pt-3 pb-3 rounded-lg items-center">All Correct! Click to Continue!</button>
+        }
     </div>
   );
 }

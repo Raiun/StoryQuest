@@ -16,7 +16,7 @@ const reenieBeanie = Reenie_Beanie({ weight: "400", subsets: ["latin"] });
 
 const Sidebar = () => {
   return (
-    <div className="w-24 h-screen m-0 bg-white flex flex-col shadow-lg">
+    <div className="fixed w-24 h-screen m-0 bg-white flex flex-col shadow-lg">
         <div className="w-full mb-5 h-20 text-3xl bg-black">
             <div className={reenieBeanie.className}>
                 <p className="m-auto font-bold text-white text-center">Story Quest</p>
